@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Family build: strings for ProfilePickerPresenter (own file so upstream merges never conflict) -->
+<resources>
+    <string name="profile_picker_title" translatable="false">Who\'s watching?</string>
+    <string name="profile_picker_kids" translatable="false">YouTube Kids</string>
+</resources>

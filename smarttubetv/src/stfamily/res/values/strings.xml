@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string translatable="false" name="app_name"><![CDATA[SmartTube Family]]></string>
+    <string translatable="false" name="browse_title"><![CDATA[SmartTube Family]]></string>
+    <!-- overrides leanbackassistant stfdroid value: must equal ${applicationId}.search_provider -->
+    <string translatable="false" name="search_authority">nz.joe.smarttube.search_provider</string>
+</resources>

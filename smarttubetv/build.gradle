@@ -177,7 +177,26 @@ android {
                 abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86'
             }
         }
+        // Family build (fejoa123): own package so it installs beside the official app,
+        // own update feed (src/stfamily/res/values/update_urls.xml), profile picker. See FAMILY.md.
+        stfamily {
+            applicationId "nz.joe.smarttube"
+            targetSdkVersion project.properties.compileSdkVersion
+            versionCode android.defaultConfig.versionCode * 100 + familyRevision()
+            versionNameSuffix "-family." + familyRevision()
+            // Library modules only know stbeta/ststable/stfdroid; fdroid has no update urls of its own
+            matchingFallbacks = ['stfdroid']
+        }
     }
+}
+
+def familyRevision() {
+    def props = new Properties()
+    def file = rootProject.file("family.properties")
+    if (file.exists()) {
+        file.withInputStream { props.load(it) }
+    }
+    return (props.getProperty("familyRevision", "1")) as int
 }
 
 dependencies {

@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.ProfilePickerPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
@@ -123,7 +124,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     private void showAccountSelectionIfNeeded() {
-        AccountSelectionPresenter.instance(getContext()).show();
+        ProfilePickerPresenter.instance(getContext()).showOnBoot(); // family build
     }
 
     private void checkAccountPassword() {
