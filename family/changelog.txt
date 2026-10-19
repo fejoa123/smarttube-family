@@ -1,0 +1,2 @@
+Who's watching? picker on every launch and on the account button (accounts, guest, + Sign in)
+Picker stays out of the way when a video, channel or search is opened from the home screen or voice

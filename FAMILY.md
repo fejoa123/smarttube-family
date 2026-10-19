@@ -9,7 +9,10 @@ Installs beside the official app as **SmartTube Family** (`nz.joe.smarttube`).
   One press on the top-bar account button opens it (upstream cycled to the next account instead).
   Rows: YouTube Kids (only if the official Kids app is installed; opens it and stops any SmartTube video),
   every signed-in account with its avatar, Guest, "+ Sign in". Shown at every launch by default (Settings >
-  Accounts > "Select account on boot" turns it off); skipped when there is only one account and no Kids app.
+  Accounts > "Select account on boot" turns it off); skipped when there is only one account and no Kids app,
+  and when the app was opened for a specific video/channel/playlist/search (home-screen tile, voice, link).
+  "Every launch" includes resuming from the home screen: SplashActivity is singleInstance, so each icon press
+  arrives as onNewIntent -> SplashPresenter.runPerViewTasks.
   All rows are ONE radio list on purpose: a second category makes the dialog fold them into a sub-menu.
   Joe's kids use their own Google accounts as profiles (no YouTube Kids app on the TV, 2026-10-19).
 - Flavor `stfamily` (`smarttubetv/build.gradle`, `smarttubetv/src/stfamily/`): own package, FAMILY banner,
@@ -33,11 +36,21 @@ Bump `familyRevision` when OUR code changes without an upstream release; keep it
 
 ## Build / update
 
-- `family/sync.sh` - merge new upstream release, build, write `family/out/` (APKs + `smarttube_family.json`).
-  `--force` rebuilds now. Exit 2 = merge conflict (nothing built), 3 = build failed.
+- `family/sync.sh` - merge the newest upstream RELEASE TAG on our channel (`upstreamChannel` in
+  `family.properties`: `stable` = tags like `32.56s`, the default since 2026-10-19; `beta` = every release),
+  build, write `family/out/` (APKs + `smarttube_family.json`). Never merges master's unreleased work.
+  `--force` rebuilds now without a new upstream release. Exit 1 = dirty tree / wrong branch, 2 = merge conflict
+  (merge aborted, nothing built), 3 = build failed (the merge commit stays on `family`; fix, then `--force`).
+  Upstream tags 32.68 (beta) = family.1/.2 base; stable was 32.56s then, so devices sit on 32.68 until a stable passes it.
 - `family/publish.sh` - GitHub release `v<versionName>` on public fork **fejoa123/smarttube-family** + push `family`.
   Devices read `releases/latest/download/smarttube_family.json` (`smarttubetv/src/stfamily/res/values/update_urls.xml`),
-  so the TV and the car (internet only) update themselves. Feed format: `family/make_feed.py`.
+  so the TV and the car (internet only) update themselves. The app checks at most every 60 s, 10 s after launch,
+  and pins an Update row in the sidebar. Feed format: `family/make_feed.py`.
+- Changelog: `family/changelog.txt` (our lines, prefixed "Family:") + upstream's GitHub release-note bullets.
+  NOT `notes.txt`: upstream's .gitignore ignores that name.
+- `family/auto_update.sh` - Task Scheduler job **"SmartTube Family Update"** (daily, user joetm, runs late if the
+  PC was off): sync -> publish -> ntfy push (topic `ha-tools\.ntfy-topic`). Pushes only on an update or a failure.
+  Re-publishes a build whose publish failed earlier. Log `family/auto_update.log` (git-excluded).
 - Toolchain: JDK 17 `~/.jdks/jdk-17`, SDK platform 34 + build-tools 30.0.3, Gradle 7.5 via wrapper.
   `JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStoreType=Windows-ROOT` is required on this PC.
   `local.properties` must use forward slashes (`sdk.dir=C:/Users/...`); backslashes are eaten as escapes.

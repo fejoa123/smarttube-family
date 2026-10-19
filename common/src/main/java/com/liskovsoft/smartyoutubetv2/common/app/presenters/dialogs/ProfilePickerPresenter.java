@@ -21,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.YTSignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.utils.GlideIconFetcher;
+import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
@@ -60,14 +61,35 @@ public class ProfilePickerPresenter extends BasePresenter<Void> {
     }
 
     /**
-     * Startup entry. Respects the "Select account on boot" setting.
+     * Startup entry (every press of the app icon lands here, SplashActivity is singleInstance).
+     * Respects the "Select account on boot" setting.
      */
-    public void showOnBoot() {
-        if (!AccountsData.instance(getContext()).isSelectAccountOnBootEnabled()) {
+    public void showOnBoot(Intent launchIntent) {
+        if (!AccountsData.instance(getContext()).isSelectAccountOnBootEnabled() || isDeepLink(launchIntent)) {
             return;
         }
 
         show(false);
+    }
+
+    /**
+     * Opened for a particular video, channel, playlist or search (home screen tile, voice, link):
+     * the viewer already chose what to watch, don't cover it with the picker.
+     */
+    private static boolean isDeepLink(Intent intent) {
+        if (intent == null) {
+            return false;
+        }
+
+        try {
+            return IntentExtractor.extractVideoId(intent) != null
+                    || IntentExtractor.extractPlaylistId(intent) != null
+                    || IntentExtractor.extractSearchText(intent) != null
+                    || IntentExtractor.isStartVoiceCommand(intent)
+                    || IntentExtractor.extractChannelId(intent) != null;
+        } catch (RuntimeException e) {
+            return false; // malformed url, the intent chain reports it
+        }
     }
 
     /**

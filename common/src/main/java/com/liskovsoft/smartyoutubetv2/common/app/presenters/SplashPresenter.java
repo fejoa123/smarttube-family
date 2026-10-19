@@ -124,7 +124,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     private void showAccountSelectionIfNeeded() {
-        ProfilePickerPresenter.instance(getContext()).showOnBoot(); // family build
+        ProfilePickerPresenter.instance(getContext()).showOnBoot(getView().getNewIntent()); // family build
     }
 
     private void checkAccountPassword() {

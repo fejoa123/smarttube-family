@@ -12,7 +12,12 @@ REPO="fejoa123/smarttube-family"
 
 VERSION_NAME="$(python -c "import json;d=json.load(open('family/out/smarttube_family.json'));print([k for k in d if k!='package'][0])")"
 TAG="v$VERSION_NAME"
-NOTES="SmartTube Family $VERSION_NAME (upstream yuliskov/SmartTube + Who's watching? picker).${1:+ $1}"
+CHANGES="$(python -c "import json,sys;d=json.load(open('family/out/smarttube_family.json',encoding='utf-8'));print('\n'.join('- '+l for l in d[sys.argv[1]]['changelog']))" "$VERSION_NAME")"
+NOTES="SmartTube Family $VERSION_NAME (upstream yuliskov/SmartTube + Who's watching? picker).${1:+ $1}
+
+$CHANGES
+
+Install by hand: the universal APK works everywhere; Google TV Streamer = armeabi-v7a."
 
 if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
     echo "release $TAG already exists; bump familyRevision in family.properties and rebuild"; exit 1
