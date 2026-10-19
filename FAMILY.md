@@ -54,6 +54,7 @@ Bump `familyRevision` when OUR code changes without an upstream release; keep it
 `C:\Users\joetm\.android-signing\smarttube-family\` (jks + keystore.properties). `keystore.properties` in the
 repo root is a copy and is excluded via `.git/info/exclude`. **Losing the key = every device must uninstall
 and reinstall (settings lost unless backed up).**
+Backup: private repo **fejoa123/smarttube-family-signing** (jks + keystore.properties + restore steps, 2026-10-19).
 
 ## Moving from the official SmartTube
 
