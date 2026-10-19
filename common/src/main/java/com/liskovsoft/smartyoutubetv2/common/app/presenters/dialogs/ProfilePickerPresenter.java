@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.YTSignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.utils.GlideIconFetcher;
@@ -132,6 +133,15 @@ public class ProfilePickerPresenter extends BasePresenter<Void> {
                     AccountSelectionPresenter.instance(getContext()).selectAccount(null);
                     dialogPresenter.closeDialog();
                 }, mSignInService.getSelectedAccount() == null
+        ));
+
+        // Sign in another account without digging through settings.
+        // Same list on purpose: a second category makes the dialog fold the profiles into a sub-menu (extra press).
+        optionItems.add(UiOptionItem.from(
+                "+ " + getContext().getString(R.string.dialog_add_account), option -> {
+                    dialogPresenter.closeDialog();
+                    YTSignInPresenter.instance(getContext()).start();
+                }, false
         ));
 
         dialogPresenter.appendRadioCategory(getContext().getString(R.string.profile_picker_title), optionItems);
