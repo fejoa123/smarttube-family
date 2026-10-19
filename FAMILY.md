@@ -60,7 +60,11 @@ Bump `familyRevision` when OUR code changes without an upstream release; keep it
 
 - Google TV Streamer (`kirkwood`, Android 14, **32-bit userspace: armeabi-v7a**), adb `192.168.1.248:5555`
   (network debugging authorised for this PC 2026-10-19). Official SmartTube `org.smarttube.stable` still installed.
-- BYD Shark 6 DiLink: sideloaded with a laptop after the 10x firmware-version tap trick.
+- BYD Shark 6 DiLink: sideloaded with a laptop after the 10x firmware-version tap trick. Install the
+  `universal` APK from the latest release once; after that it self-updates like the TV.
+- Release history: v32.68-family.1 (2026-10-19, first), v32.68-family.2 (2026-10-19, deep-link skip; published by
+  auto_update.sh as its end-to-end test, ntfy push confirmed). TV had family.1 (adb install), so family.2 is the
+  first over-the-air update it should offer - not yet confirmed on the TV.
 
 ## Signing key
 
