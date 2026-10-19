@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Family build update feed: written by family/make_feed.py, published by family/publish.sh -->
+<resources>
+    <string-array name="update_urls">
+        <item>https://github.com/fejoa123/smarttube-family/releases/latest/download/smarttube_family.json</item>
+    </string-array>
+</resources>

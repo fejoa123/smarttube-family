@@ -8,8 +8,10 @@ Installs beside the official app as **SmartTube Family** (`nz.joe.smarttube`).
 - **Who's watching? picker** (`common/.../presenters/dialogs/ProfilePickerPresenter.java`).
   One press on the top-bar account button opens it (upstream cycled to the next account instead).
   Rows: YouTube Kids (only if the official Kids app is installed; opens it and stops any SmartTube video),
-  every signed-in account with its avatar, Guest. Also shown at launch when Settings > Accounts >
-  "Select account on boot" is on.
+  every signed-in account with its avatar, Guest, "+ Sign in". Shown at every launch by default (Settings >
+  Accounts > "Select account on boot" turns it off); skipped when there is only one account and no Kids app.
+  All rows are ONE radio list on purpose: a second category makes the dialog fold them into a sub-menu.
+  Joe's kids use their own Google accounts as profiles (no YouTube Kids app on the TV, 2026-10-19).
 - Flavor `stfamily` (`smarttubetv/build.gradle`, `smarttubetv/src/stfamily/`): own package, FAMILY banner,
   `<queries>` for the Kids packages (Android 11+ package visibility), own search authority
   (`nz.joe.smarttube.search_provider`, overrides the hard-coded fdroid value from leanbackassistant).
@@ -17,7 +19,9 @@ Installs beside the official app as **SmartTube Family** (`nz.joe.smarttube`).
 ## Keeping merges clean (rules)
 
 - New behaviour goes in NEW files. Upstream files get one-line hooks marked `// family build`.
-  Current hooks: `SplashPresenter.showAccountSelectionIfNeeded`, `NavigateTitleView` account orb click.
+  Current hooks: `SplashPresenter.showAccountSelectionIfNeeded`, `NavigateTitleView` account orb click,
+  `AccountsData.restoreState` (boot-picker default from `R.bool.select_account_on_boot_default`, true in stfamily),
+  `Utils.KNOWN_PACKAGES` (our package, so About shows the update check).
 - Library modules have no `stfamily` flavor; the app falls back to their `stfdroid` variant
   (`matchingFallbacks`). So `BuildConfig.FLAVOR` inside `common` is `stfdroid` - never branch on it.
 - Strings for our features: `common/src/main/res/values/family_strings.xml`.
@@ -31,11 +35,19 @@ Bump `familyRevision` when OUR code changes without an upstream release; keep it
 
 - `family/sync.sh` - merge new upstream release, build, write `family/out/` (APKs + `smarttube_family.json`).
   `--force` rebuilds now. Exit 2 = merge conflict (nothing built), 3 = build failed.
-- Update feed format: `family/make_feed.py` (base URL in `family/feed_base_url.txt`).
+- `family/publish.sh` - GitHub release `v<versionName>` on public fork **fejoa123/smarttube-family** + push `family`.
+  Devices read `releases/latest/download/smarttube_family.json` (`smarttubetv/src/stfamily/res/values/update_urls.xml`),
+  so the TV and the car (internet only) update themselves. Feed format: `family/make_feed.py`.
 - Toolchain: JDK 17 `~/.jdks/jdk-17`, SDK platform 34 + build-tools 30.0.3, Gradle 7.5 via wrapper.
   `JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStoreType=Windows-ROOT` is required on this PC.
   `local.properties` must use forward slashes (`sdk.dir=C:/Users/...`); backslashes are eaten as escapes.
 - AVG blocked `gradle-launcher-7.5.jar` on first run (2026-10-19); Joe added an exception.
+
+## Devices
+
+- Google TV Streamer (`kirkwood`, Android 14, **32-bit userspace: armeabi-v7a**), adb `192.168.1.248:5555`
+  (network debugging authorised for this PC 2026-10-19). Official SmartTube `org.smarttube.stable` still installed.
+- BYD Shark 6 DiLink: sideloaded with a laptop after the 10x firmware-version tap trick.
 
 ## Signing key
 

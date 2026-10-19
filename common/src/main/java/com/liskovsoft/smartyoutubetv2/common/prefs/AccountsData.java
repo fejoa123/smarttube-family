@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 
@@ -100,7 +101,7 @@ public class AccountsData implements AccountChangeListener {
 
         String[] split = Helpers.splitData(data);
 
-        mIsSelectAccountOnBootEnabled = Helpers.parseBoolean(split, 0, false);
+        mIsSelectAccountOnBootEnabled = Helpers.parseBoolean(split, 0, mContext.getResources().getBoolean(R.bool.select_account_on_boot_default)); // family build
         // mIsAccountProtectedWithPassword
         // mAccountPassword
         String[] passwords = Helpers.parseArray(split, 3);

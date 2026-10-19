@@ -3,4 +3,6 @@
 <resources>
     <string name="profile_picker_title" translatable="false">Who\'s watching?</string>
     <string name="profile_picker_kids" translatable="false">YouTube Kids</string>
+    <!-- "Select account on boot" default; the stfamily flavor overrides it to true -->
+    <bool name="select_account_on_boot_default">false</bool>
 </resources>

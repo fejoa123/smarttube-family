@@ -4,7 +4,8 @@ Usage: make_feed.py <out_dir> <version_name> <version_code> <upstream_version>
 
 Format (SharedModules/appupdatechecker2 AppVersionChecker): a "package" object with download urls
 (per-ABI lists are tried first, keyed by Build.SUPPORTED_ABIS[0]), plus one object per version.
-Download urls are <base>/<apk name>; <base> comes from family/feed_base_url.txt.
+Download urls are <base>/v<version_name>/<apk name> (one GitHub release per version, see publish.sh);
+<base> comes from family/feed_base_url.txt.
 """
 import json
 import os
@@ -17,7 +18,7 @@ with open(os.path.join(here, "feed_base_url.txt"), encoding="utf-8") as f:
     base = f.read().strip().rstrip("/")
 
 def url(abi):
-    return f"{base}/SmartTube_family_{version_name}_{abi}.apk"
+    return f"{base}/v{version_name}/SmartTube_family_{version_name}_{abi}.apk"
 
 feed = {
     "package": {
